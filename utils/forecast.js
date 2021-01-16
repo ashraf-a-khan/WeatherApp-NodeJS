@@ -8,16 +8,19 @@ const forecast = (latitude, longitude, callback) => {
     longitude +
     "&units=f";
 
-  request({ url: url, json: true }, (error, response) => {
+  request({ url, json: true }, (error, { body }) => {
     if (error) {
       callback("Unable to connect to weather services!", undefined);
-    } else if (response.body.error) {
+    } else if (body.error) {
       callback("Unable to find location. Try another search.", undefined);
     } else {
-      callback(undefined, {
-        Temperature: response.body.current.temperature,
-        FeelsLike: response.body.current.feelslike,
-      });
+      callback(
+        undefined,
+        "The temperature is " +
+          body.current.temperature +
+          ". It Feels Like " +
+          body.current.feelslike
+      );
     }
   });
 };
